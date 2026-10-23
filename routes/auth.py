@@ -1,0 +1,32 @@
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+
+
+from database import get_db
+from repositories.users import UserRepository
+from services.auth import AuthService
+from schemas import UserCreateRequest, UserCreateResponse
+
+router = APIRouter()
+
+
+def get_user_repository(db: Session = Depends(get_db)) -> UserRepository:
+    return UserRepository(db)
+
+
+def get_auth_service(
+    repo: UserRepository = Depends(get_user_repository),
+) -> AuthService:
+    return AuthService(repo)
+
+
+@router.post("/register", response_model=UserCreateResponse, status_code=201)
+def register(
+    payload: UserCreateRequest, service: AuthService = Depends(get_auth_service)
+):
+    return service.register(payload)
+
+
+@router.post("/login", response_model=UserCreateResponse)
+def login(payload: UserCreateRequest, service: AuthService = Depends(get_auth_service)):
+    return service.authenticate(payload.email, payload.password)

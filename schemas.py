@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class TaskCreateRequest(BaseModel):
@@ -13,3 +13,13 @@ class TaskUpdateRequest(BaseModel):
 
 class TaskCreateResponse(TaskCreateRequest):
     task_id: int
+
+
+class UserCreateRequest(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class UserCreateResponse(BaseModel):
+    user_id: int
+    email: EmailStr
