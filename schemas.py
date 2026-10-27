@@ -23,3 +23,8 @@ class UserCreateRequest(BaseModel):
 class UserCreateResponse(BaseModel):
     user_id: int
     email: EmailStr
+
+
+class TokenOutResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"

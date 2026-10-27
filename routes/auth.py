@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from repositories.users import UserRepository
 from services.auth import AuthService
-from schemas import UserCreateRequest, UserCreateResponse
+from schemas import UserCreateRequest, UserCreateResponse, TokenOutResponse
 
 router = APIRouter()
 
@@ -27,6 +27,6 @@ def register(
     return service.register(payload)
 
 
-@router.post("/login", response_model=UserCreateResponse)
+@router.post("/login", response_model=TokenOutResponse)
 def login(payload: UserCreateRequest, service: AuthService = Depends(get_auth_service)):
     return service.authenticate(payload.email, payload.password)
